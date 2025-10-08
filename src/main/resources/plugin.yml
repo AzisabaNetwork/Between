@@ -1,0 +1,4 @@
+name: Between
+version: '1.0-SNAPSHOT'
+main: com.github.bea4dev.between.Between
+api-version: '1.21'
