@@ -2,6 +2,7 @@ package com.github.bea4dev.between
 
 import com.github.bea4dev.between.biome.BiomeRegistry
 import com.github.bea4dev.between.dimension.DimensionRegistry
+import com.github.bea4dev.between.listener.BedListener
 import com.github.bea4dev.between.listener.ChunkListener
 import com.github.bea4dev.between.listener.PlayerJoinQuitListener
 import com.github.bea4dev.between.listener.TestListener
@@ -25,6 +26,7 @@ class Between : JavaPlugin() {
         pluginManager.registerEvents(TestListener(), this)
         pluginManager.registerEvents(PlayerJoinQuitListener(), this)
         pluginManager.registerEvents(ChunkListener(), this)
+        pluginManager.registerEvents(BedListener(), this)
 
         DimensionRegistry.init()
         BiomeRegistry.init()

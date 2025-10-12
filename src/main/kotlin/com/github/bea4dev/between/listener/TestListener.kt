@@ -14,8 +14,8 @@ import org.bukkit.event.player.PlayerJoinEvent
 class TestListener: Listener {
     @EventHandler
     fun onPlayerJoin(event: PlayerJoinEvent) {
-        val player = event.player
-        teleport(player)
+        //val player = event.player
+        //teleport(player)
     }
 
     @EventHandler
