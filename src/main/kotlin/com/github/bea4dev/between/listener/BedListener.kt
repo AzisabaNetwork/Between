@@ -1,9 +1,8 @@
 package com.github.bea4dev.between.listener
 
 import com.destroystokyo.paper.event.player.PlayerSetSpawnEvent
+import com.github.bea4dev.between.coroutine.CoroutineFlagRegistry
 import io.papermc.paper.event.player.PlayerDeepSleepEvent
-import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Bukkit
 import org.bukkit.event.Event
 import org.bukkit.event.EventHandler
@@ -31,13 +30,17 @@ class BedListener : Listener {
         }
 
         event.setUseBed(Event.Result.ALLOW)
-        player.sendActionBar(Component.text("寝ると戻れる").decorate(TextDecoration.UNDERLINED))
     }
 
     @EventHandler
     fun onPlayerSleep(event: PlayerDeepSleepEvent) {
         val player = event.player
         val worldName = player.world.name
+
+        if (worldName == "tutorial") {
+            CoroutineFlagRegistry.TUTORIAL_ENTER_BED.onComplete(player)
+            return
+        }
 
         if (isBetween(worldName)) {
             val world = Bukkit.getWorld("world")!!

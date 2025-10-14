@@ -10,7 +10,9 @@ import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import kotlin.coroutines.CoroutineContext
 
-object CoroutineFlagRegistry {}
+object CoroutineFlagRegistry {
+    val TUTORIAL_ENTER_BED = PlayerCoroutineFlag()
+}
 
 class CoroutineFlag(private var isCompleted: Boolean) : ManualDispatcher() {
     @Synchronized
