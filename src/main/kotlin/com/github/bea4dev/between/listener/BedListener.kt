@@ -2,12 +2,18 @@ package com.github.bea4dev.between.listener
 
 import com.destroystokyo.paper.event.player.PlayerSetSpawnEvent
 import com.github.bea4dev.between.coroutine.CoroutineFlagRegistry
+import com.github.bea4dev.between.scenario.BLACK_SCREEN_TEXT
+import com.github.bea4dev.between.world.WorldRegistry
 import io.papermc.paper.event.player.PlayerDeepSleepEvent
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.title.Title
 import org.bukkit.Bukkit
+import org.bukkit.Location
 import org.bukkit.event.Event
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerBedEnterEvent
+import java.time.Duration
 
 class BedListener : Listener {
     @EventHandler
@@ -51,6 +57,19 @@ class BedListener : Listener {
             } else {
                 player.teleport(world.spawnLocation)
             }
+        } else if (worldName == "world") {
+            val between = WorldRegistry.getNextBetween()
+            val location = Location(between, 0.5, 64.0, 0.5)
+
+            player.showTitle(
+                Title.title(
+                    Component.text(BLACK_SCREEN_TEXT),
+                    Component.empty(),
+                    Title.Times.times(Duration.ZERO, Duration.ofSeconds(1), Duration.ofSeconds(3))
+                )
+            )
+
+            player.teleport(location)
         }
     }
 

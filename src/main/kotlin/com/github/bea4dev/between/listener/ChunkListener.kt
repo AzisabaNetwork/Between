@@ -16,5 +16,8 @@ class ChunkListener: Listener {
         if (world.name == "tutorial") {
             nmsHandler.setBiomeForChunk(chunk, BiomeRegistry.BETWEEN)
         }
+        if (world.name.contains("between")) {
+            nmsHandler.setBiomeForChunk(chunk, BiomeRegistry.BETWEEN)
+        }
     }
 }

@@ -13,7 +13,7 @@ object BiomeRegistry {
 
         val between = BiomeDataContainer()
         nmsHandler.setDefaultBiomeData(between)
-        between.fogColorRGB = Color.WHITE.asRGB()
+        between.fogColorRGB = Color.GRAY.asRGB()
         between.music = "minecraft:none"
         between.temperature = 0.8F
         between.temperatureAttribute = BiomeDataContainer.TemperatureAttribute.NORMAL

@@ -13,6 +13,7 @@ repositories {
         name = "papermc-repo"
     }
     maven("https://raw.github.com/bea4dev/VanillaSourceBukkit/mvn-repo/")
+    maven("https://jitpack.io")
 }
 
 dependencies {
@@ -26,6 +27,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1")
 
     compileOnly("com.github.bea4dev:vanilla_source_api:0.0.3")
+    compileOnly("com.github.bea4dev:ChiyogamiLib:793983cef1")
 }
 
 val targetJavaVersion = 21
