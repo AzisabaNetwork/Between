@@ -1,6 +1,7 @@
 package com.github.bea4dev.between.listener
 
 import com.github.bea4dev.between.Between
+import com.github.bea4dev.between.entity.RandomShadowProcessor
 import com.github.bea4dev.between.scenario.script.Tutorial
 import net.kyori.adventure.text.Component
 import org.bukkit.event.EventHandler
@@ -18,5 +19,7 @@ class PlayerJoinQuitListener: Listener {
         }
 
         Tutorial().start(player)
+
+        RandomShadowProcessor.start(player)
     }
 }
