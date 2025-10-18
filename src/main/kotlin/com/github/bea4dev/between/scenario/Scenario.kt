@@ -1,13 +1,17 @@
 package com.github.bea4dev.between.scenario
 
+import com.github.bea4dev.between.coroutine.MainThread
 import com.github.bea4dev.between.coroutine.launch
+import com.github.bea4dev.between.world.WorldRegistry
 import com.github.bea4dev.vanilla_source.api.VanillaSourceAPI
 import com.github.bea4dev.vanilla_source.api.entity.tick.TickThread
-import com.github.bea4dev.vanilla_source.api.text.TextBox
+import com.github.bea4dev.vanilla_source.api.nms.entity.NMSEntityController
 import com.google.gson.JsonParser
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.title.Title
-import org.bukkit.Sound
+import org.bukkit.GameMode
+import org.bukkit.Location
+import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
 import java.io.InputStreamReader
 import java.net.URL
@@ -61,26 +65,28 @@ abstract class Scenario {
     fun clearBlack(player: Player) {
         player.resetTitle()
     }
-}
 
-fun TextBox.lowSound(): TextBox {
-    this.setLowerSound(
-        net.kyori.adventure.sound.Sound.sound(
-            Sound.BLOCK_NOTE_BLOCK_BIT,
-            net.kyori.adventure.sound.Sound.Source.NEUTRAL,
-            Float.MAX_VALUE,
-            0.9F
-        )
-    )
-    this.setHigherSound(
-        net.kyori.adventure.sound.Sound.sound(
-            Sound.BLOCK_NOTE_BLOCK_BIT,
-            net.kyori.adventure.sound.Sound.Source.NEUTRAL,
-            Float.MAX_VALUE,
-            0.95F
-        )
-    )
-    return this
+    private var blackSpaceEntity: NMSEntityController? = null
+
+    suspend fun blackSpace(player: Player) {
+        MainThread.sync {
+            player.gameMode = GameMode.SPECTATOR
+            player.teleport(Location(WorldRegistry.TUTORIAL, 24.5, 4.0, 40.5))
+        }.await()
+
+        val nmsHandler = VanillaSourceAPI.getInstance().nmsHandler
+
+        if (blackSpaceEntity != null) {
+            val destroyPacket = nmsHandler.createEntityDestroyPacket(blackSpaceEntity)
+            nmsHandler.sendPacket(player, destroyPacket)
+        }
+        blackSpaceEntity = nmsHandler.createNMSEntityController(WorldRegistry.TUTORIAL, 24.5, 4.0, 40.5, EntityType.BOAT, null)
+        val spawnPacket = nmsHandler.createSpawnEntityPacket(blackSpaceEntity)
+        nmsHandler.sendPacket(player, spawnPacket)
+
+        val cameraPacket = nmsHandler.createCameraPacket(blackSpaceEntity)
+        nmsHandler.sendPacket(player, cameraPacket)
+    }
 }
 
 fun getPlayerSkin(uuid: UUID): Pair<String, String> {

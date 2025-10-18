@@ -1,9 +1,11 @@
 package com.github.bea4dev.between.world
 
 import com.github.bea4dev.between.Between
+import com.github.bea4dev.between.chest.ChestProcessor
 import com.github.bea4dev.between.dimension.DimensionRegistry
 import com.github.bea4dev.between.save.ServerData
 import com.github.bea4dev.between.util.schedule
+import com.github.bea4dev.between.world.generator.PoolGenerator
 import com.github.bea4dev.between.world.generator.SingleBlockGenerator
 import com.github.bea4dev.between.world.generator.VoidGenerator
 import com.github.bea4dev.vanilla_source.api.VanillaSourceAPI
@@ -15,7 +17,7 @@ import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.World
 import org.bukkit.WorldCreator
-import world.chiyogami.chiyogamilib.scheduler.WorldThreadRunnable
+import org.bukkit.inventory.ItemStack
 import java.io.IOException
 import java.nio.file.FileVisitResult
 import java.nio.file.Files
@@ -28,6 +30,10 @@ object WorldRegistry {
     lateinit var TUTORIAL: World
         private set
     lateinit var BETWEEN_LIBRARY: World
+        private set
+    lateinit var BETWEEN_OFFICE: World
+        private set
+    lateinit var BETWEEN_POOL: World
         private set
 
     fun init(then: () -> Unit) {
@@ -42,6 +48,8 @@ object WorldRegistry {
             nmsHandler.setDimensionType(TUTORIAL, DimensionRegistry.BETWEEN)
 
             deleteDirectory(Path("between_library"))
+            deleteDirectory(Path("between_office"))
+            deleteDirectory(Path("between_pool"))
 
             BETWEEN_LIBRARY = Bukkit.createWorld(
                 WorldCreator("between_library")
@@ -49,17 +57,94 @@ object WorldRegistry {
                     .environment(World.Environment.NORMAL)
             )!!
             nmsHandler.setDimensionType(BETWEEN_LIBRARY, DimensionRegistry.BETWEEN)
-
             BETWEEN_LIBRARY.setGameRule(GameRule.DO_MOB_SPAWNING, false)
+
+            BETWEEN_OFFICE = Bukkit.createWorld(
+                WorldCreator("between_office")
+                    .generator(SingleBlockGenerator(Material.WHITE_CONCRETE))
+                    .environment(World.Environment.NORMAL)
+            )!!
+            nmsHandler.setDimensionType(BETWEEN_OFFICE, DimensionRegistry.BETWEEN)
+            BETWEEN_OFFICE.setGameRule(GameRule.DO_MOB_SPAWNING, false)
+
+            BETWEEN_POOL = Bukkit.createWorld(
+                WorldCreator("between_pool")
+                    .generator(PoolGenerator())
+                    .environment(World.Environment.NORMAL)
+            )!!
+            BETWEEN_POOL.setGameRule(GameRule.DO_MOB_SPAWNING, false)
 
             if (ServerData.firstSetup) {
                 BETWEEN_LIBRARY.schedule {
+                    val chestProcessor = ChestProcessor(
+                        BETWEEN_LIBRARY,
+                        listOf(
+                            ItemStack(Material.BREAD).also { item -> item.amount = 1 },
+                            ItemStack(Material.IRON_INGOT).also { item -> item.amount = 2 },
+                            ItemStack(Material.RED_BED).also { item -> item.amount = 1 },
+                            ItemStack(Material.MUSIC_DISC_OTHERSIDE).also { item -> item.amount = 1 },
+                            ItemStack(Material.REDSTONE).also { item -> item.amount = 3 },
+                            ItemStack(Material.GOLD_INGOT).also { item -> item.amount = 1 },
+                            ItemStack(Material.BREAD).also { item -> item.amount = 3 },
+                        ),
+                        5,
+                        false
+                    )
+
                     JigsawProcessor(
                         BETWEEN_LIBRARY.getBlockAt(0, 64, 0),
                         JigsawReferenceManager.getFromName(NamespacedKey.fromString("lib_start")).get(0),
                         1000,
                         0
-                    ).start()
+                    ).blockProcessor(chestProcessor).start()
+                }
+
+                BETWEEN_OFFICE.schedule {
+                    val chestProcessor = ChestProcessor(
+                        BETWEEN_OFFICE,
+                        listOf(
+                            ItemStack(Material.BREAD).also { item -> item.amount = 1 },
+                            ItemStack(Material.IRON_INGOT).also { item -> item.amount = 2 },
+                            ItemStack(Material.RED_BED).also { item -> item.amount = 1 },
+                            ItemStack(Material.MUSIC_DISC_MALL).also { item -> item.amount = 1 },
+                            ItemStack(Material.REDSTONE).also { item -> item.amount = 3 },
+                            ItemStack(Material.GOLD_INGOT).also { item -> item.amount = 1 },
+                            ItemStack(Material.BREAD).also { item -> item.amount = 3 },
+                        ),
+                        5,
+                        false
+                    )
+
+                    JigsawProcessor(
+                        BETWEEN_OFFICE.getBlockAt(0, 64, 0),
+                        JigsawReferenceManager.getFromName(NamespacedKey.fromString("office_sn")).get(0),
+                        1000,
+                        0
+                    ).blockProcessor(chestProcessor).start()
+                }
+
+                BETWEEN_POOL.schedule {
+                    val chestProcessor = ChestProcessor(
+                        BETWEEN_POOL,
+                        listOf(
+                            ItemStack(Material.BREAD).also { item -> item.amount = 1 },
+                            ItemStack(Material.IRON_INGOT).also { item -> item.amount = 2 },
+                            ItemStack(Material.RED_BED).also { item -> item.amount = 1 },
+                            ItemStack(Material.MUSIC_DISC_MALL).also { item -> item.amount = 1 },
+                            ItemStack(Material.REDSTONE).also { item -> item.amount = 3 },
+                            ItemStack(Material.GOLD_INGOT).also { item -> item.amount = 1 },
+                            ItemStack(Material.BREAD).also { item -> item.amount = 3 },
+                        ),
+                        5,
+                        false
+                    )
+
+                    JigsawProcessor(
+                        BETWEEN_POOL.getBlockAt(0, 64, 0),
+                        JigsawReferenceManager.getFromName(NamespacedKey.fromString("pool_sn")).get(0),
+                        500,
+                        0
+                    ).blockProcessor(chestProcessor).start()
                 }
 
                 ServerData.firstSetup = false
@@ -72,7 +157,8 @@ object WorldRegistry {
     fun getNextBetween(): World {
         val between = when (ServerData.betweenCount) {
             0 -> BETWEEN_LIBRARY
-            else -> BETWEEN_LIBRARY
+            1 -> BETWEEN_OFFICE
+            else -> BETWEEN_POOL
         }
         ServerData.betweenCount++
 

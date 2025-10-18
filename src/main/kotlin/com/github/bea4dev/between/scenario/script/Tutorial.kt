@@ -13,7 +13,6 @@ import com.github.bea4dev.between.world.WorldRegistry
 import com.github.bea4dev.vanilla_source.api.VanillaSourceAPI
 import com.github.bea4dev.vanilla_source.api.camera.CameraPositionAt
 import com.github.bea4dev.vanilla_source.api.camera.CameraPositionsManager
-import com.github.bea4dev.vanilla_source.api.nms.entity.NMSEntityController
 import com.github.bea4dev.vanilla_source.api.player.EnginePlayer
 import com.github.bea4dev.vanilla_source.api.text.TextBox
 import com.mojang.authlib.GameProfile
@@ -147,7 +146,7 @@ class Tutorial : Scenario() {
 
         blackFeedIn(player, Duration.ofSeconds(2).toMillis())
 
-        CoroutineFlagRegistry.TUTORIAL_ENTER_BED.get(player).future().await()
+        CoroutineFlagRegistry.TUTORIAL_ENTER_BED[player].future().await()
 
         blackSpace(player)
 
@@ -158,7 +157,7 @@ class Tutorial : Scenario() {
             DEFAULT_TEXT_BOX,
             "",
             1,
-            "どうやら幼い頃に遊んでいたゲームの世界へ\n閉じ込められたらしい。\n"
+            "どうやら幼い頃に遊んでいたゲームの世界へ\n囚われてしまったらしい。\n"
         ).setSound().play().await()
 
         TextBox(
@@ -194,27 +193,5 @@ class Tutorial : Scenario() {
             1,
             "今は少しだけ休もう――\n\n"
         ).setSound().play().await()
-    }
-
-    private var blackSpaceEntity: NMSEntityController? = null
-
-    private suspend fun blackSpace(player: Player) {
-        MainThread.sync {
-            player.gameMode = GameMode.SPECTATOR
-            player.teleport(Location(WorldRegistry.TUTORIAL, 24.5, 4.0, 40.5))
-        }.await()
-
-        val nmsHandler = VanillaSourceAPI.getInstance().nmsHandler
-
-        if (blackSpaceEntity != null) {
-            val destroyPacket = nmsHandler.createEntityDestroyPacket(blackSpaceEntity)
-            nmsHandler.sendPacket(player, destroyPacket)
-        }
-        blackSpaceEntity = nmsHandler.createNMSEntityController(WorldRegistry.TUTORIAL, 24.5, 4.0, 40.5, EntityType.BOAT, null)
-        val spawnPacket = nmsHandler.createSpawnEntityPacket(blackSpaceEntity)
-        nmsHandler.sendPacket(player, spawnPacket)
-
-        val cameraPacket = nmsHandler.createCameraPacket(blackSpaceEntity)
-        nmsHandler.sendPacket(player, cameraPacket)
     }
 }

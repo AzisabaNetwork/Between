@@ -3,6 +3,10 @@ package com.github.bea4dev.between.listener
 import com.destroystokyo.paper.event.player.PlayerSetSpawnEvent
 import com.github.bea4dev.between.coroutine.CoroutineFlagRegistry
 import com.github.bea4dev.between.scenario.BLACK_SCREEN_TEXT
+import com.github.bea4dev.between.scenario.script.BetweenLibrary
+import com.github.bea4dev.between.scenario.script.BetweenOffice
+import com.github.bea4dev.between.scenario.script.BetweenPool
+import com.github.bea4dev.between.util.setMorning
 import com.github.bea4dev.between.world.WorldRegistry
 import io.papermc.paper.event.player.PlayerDeepSleepEvent
 import net.kyori.adventure.text.Component
@@ -49,27 +53,33 @@ class BedListener : Listener {
         }
 
         if (isBetween(worldName)) {
-            val world = Bukkit.getWorld("world")!!
-            val playerRespawnLocation = player.respawnLocation
+            Bukkit.getWorld("world")!!.setMorning()
+        }
 
-            if (playerRespawnLocation?.world == world) {
-                player.teleport(playerRespawnLocation)
-            } else {
-                player.teleport(world.spawnLocation)
+        when (worldName) {
+            "between_library" -> {
+                BetweenLibrary().start(player)
             }
-        } else if (worldName == "world") {
-            val between = WorldRegistry.getNextBetween()
-            val location = Location(between, 0.5, 64.0, 0.5)
+            "between_office" -> {
+                BetweenOffice().start(player)
+            }
+            "between_pool" -> {
+                BetweenPool().start(player)
+            }
+            "world" -> {
+                val between = WorldRegistry.getNextBetween()
+                val location = Location(between, 0.5, 64.0, 0.5)
 
-            player.showTitle(
-                Title.title(
-                    Component.text(BLACK_SCREEN_TEXT),
-                    Component.empty(),
-                    Title.Times.times(Duration.ZERO, Duration.ofSeconds(1), Duration.ofSeconds(3))
+                player.showTitle(
+                    Title.title(
+                        Component.text(BLACK_SCREEN_TEXT),
+                        Component.empty(),
+                        Title.Times.times(Duration.ZERO, Duration.ofSeconds(1), Duration.ofSeconds(3))
+                    )
                 )
-            )
 
-            player.teleport(location)
+                player.teleport(location)
+            }
         }
     }
 
