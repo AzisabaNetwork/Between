@@ -11,6 +11,7 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.title.Title
 import org.bukkit.GameMode
 import org.bukkit.Location
+import org.bukkit.entity.Boat
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
 import java.io.InputStreamReader
@@ -81,6 +82,8 @@ abstract class Scenario {
             nmsHandler.sendPacket(player, destroyPacket)
         }
         blackSpaceEntity = nmsHandler.createNMSEntityController(WorldRegistry.TUTORIAL, 24.5, 4.0, 40.5, EntityType.BOAT, null)
+        val bukkitBoat = blackSpaceEntity?.bukkitEntity as Boat
+        bukkitBoat.boatType = Boat.Type.BAMBOO
         val spawnPacket = nmsHandler.createSpawnEntityPacket(blackSpaceEntity)
         nmsHandler.sendPacket(player, spawnPacket)
 

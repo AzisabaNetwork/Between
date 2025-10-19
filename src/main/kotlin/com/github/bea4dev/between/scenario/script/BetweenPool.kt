@@ -22,7 +22,7 @@ class BetweenPool : Scenario() {
             DEFAULT_TEXT_BOX,
             "",
             1,
-            "久々の休息――\n\n"
+            "この精神世界に、出口はあるのだろうか。\n\n"
         ).setSound().play().await()
 
         TextBox(
@@ -30,7 +30,15 @@ class BetweenPool : Scenario() {
             DEFAULT_TEXT_BOX,
             "",
             1,
-            "体のこわばりがほどける。\n\n"
+            "このまま出られなくても――。\nそんな考えが、頭をよぎる。\n"
+        ).setSound().play().await()
+
+        TextBox(
+            player,
+            DEFAULT_TEXT_BOX,
+            "",
+            1,
+            "何かとても大切なことを、\n忘れている気がする――。\n"
         ).setSound().play().await()
 
         delay(Duration.ofSeconds(2).toMillis())

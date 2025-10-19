@@ -47,9 +47,9 @@ object WorldRegistry {
             )!!
             nmsHandler.setDimensionType(TUTORIAL, DimensionRegistry.BETWEEN)
 
-            deleteDirectory(Path("between_library"))
-            deleteDirectory(Path("between_office"))
-            deleteDirectory(Path("between_pool"))
+            //deleteDirectory(Path("between_library"))
+            //deleteDirectory(Path("between_office"))
+            //deleteDirectory(Path("between_pool"))
 
             BETWEEN_LIBRARY = Bukkit.createWorld(
                 WorldCreator("between_library")
@@ -72,6 +72,7 @@ object WorldRegistry {
                     .generator(PoolGenerator())
                     .environment(World.Environment.NORMAL)
             )!!
+            nmsHandler.setDimensionType(BETWEEN_POOL, DimensionRegistry.BETWEEN_NO_FOG)
             BETWEEN_POOL.setGameRule(GameRule.DO_MOB_SPAWNING, false)
 
             if (ServerData.firstSetup) {

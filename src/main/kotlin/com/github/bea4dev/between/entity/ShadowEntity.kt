@@ -42,7 +42,7 @@ class ShadowEntity(
         }
 
         fun ofShadow(location: Location): ShadowEntity {
-            val profile = GameProfile(UUID.randomUUID(), "？？？？？")
+            val profile = GameProfile(UUID.randomUUID(), "")
             profile.properties.put(
                 "textures", Property(
                     "textures",
@@ -68,7 +68,10 @@ class ShadowEntity(
 
     init {
         super.collideEntities = true
+        super.controller.bukkitEntity.isSneaking = true
     }
+
+    private var killScheduled = false
 
     override fun tick() {
         super.tick()
@@ -86,12 +89,18 @@ class ShadowEntity(
                     continue
                 }
 
-                val startPosition = player.eyeLocation.toVector()
-                val direction = position.clone().add(Vector(0.0, 1.5, 0.0)).subtract(startPosition)
+                val playerPosition = player.eyeLocation.toVector()
+                val direction = position.clone().add(Vector(0.0, 1.5, 0.0)).subtract(playerPosition)
+
+                val playerEyeDirection = player.eyeLocation.direction
+
+                if (playerEyeDirection.angle(direction) > Math.toRadians(45.0)) {
+                    continue
+                }
 
                 val result = super.world.rayTraceBlocks(
-                    startPosition,
-                    direction.normalize(),
+                    playerPosition,
+                    direction.clone().normalize(),
                     direction.length(),
                     rayCollideOption
                 )
@@ -100,7 +109,12 @@ class ShadowEntity(
                     continue
                 }
 
-                ENTITY_TICK_THREAD.scheduleTask({ super.kill() }, 20 * 1)
+                if (!killScheduled) {
+                    ENTITY_TICK_THREAD.scheduleTask({ super.kill() }, 20 * 1)
+                    GlobalShadowEntityCounter.onDespawn(bukkitWorld)
+                }
+                killScheduled = true
+
                 break
             }
         }

@@ -4,6 +4,7 @@ import com.github.bea4dev.between.coroutine.CoroutineFlagRegistry
 import com.github.bea4dev.between.coroutine.MainThread
 import com.github.bea4dev.between.coroutine.async
 import com.github.bea4dev.between.coroutine.play
+import com.github.bea4dev.between.save.PlayerDataRegistry
 import com.github.bea4dev.between.scenario.DEFAULT_TEXT_BOX
 import com.github.bea4dev.between.scenario.Scenario
 import com.github.bea4dev.between.scenario.getPlayerSkin
@@ -193,5 +194,7 @@ class Tutorial : Scenario() {
             1,
             "今は少しだけ休もう――\n\n"
         ).setSound().play().await()
+
+        PlayerDataRegistry[player].finishedTutorial = true
     }
 }

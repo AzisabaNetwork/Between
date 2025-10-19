@@ -7,6 +7,8 @@ import com.github.bea4dev.between.listener.ChunkListener
 import com.github.bea4dev.between.listener.FoodLevelListener
 import com.github.bea4dev.between.listener.PlayerJoinQuitListener
 import com.github.bea4dev.between.listener.TestListener
+import com.github.bea4dev.between.save.PlayerDataRegistry
+import com.github.bea4dev.between.save.ServerData
 import com.github.bea4dev.between.world.WorldRegistry
 import com.github.shynixn.mccoroutine.bukkit.ShutdownStrategy
 import com.github.shynixn.mccoroutine.bukkit.mcCoroutineConfiguration
@@ -30,6 +32,9 @@ class Between : JavaPlugin() {
         // Plugin startup logic
         plugin = this
 
+        ServerData.load()
+        PlayerDataRegistry.loadAll()
+
         val pluginManager = Bukkit.getPluginManager()
         pluginManager.registerEvents(TestListener(), this)
         pluginManager.registerEvents(PlayerJoinQuitListener(), this)
@@ -47,6 +52,9 @@ class Between : JavaPlugin() {
     }
 
     override fun onDisable() {
+        ServerData.save()
+        PlayerDataRegistry.saveAll()
+
         // Plugin shutdown logic
         // shutdown coroutine jobs
         runBlocking {
