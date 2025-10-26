@@ -32,8 +32,8 @@ class Between : JavaPlugin() {
         // Plugin startup logic
         plugin = this
 
-        ServerData.load()
-        PlayerDataRegistry.loadAll()
+        //ServerData.load()
+        //PlayerDataRegistry.loadAll()
 
         val pluginManager = Bukkit.getPluginManager()
         pluginManager.registerEvents(TestListener(), this)
@@ -52,8 +52,8 @@ class Between : JavaPlugin() {
     }
 
     override fun onDisable() {
-        ServerData.save()
-        PlayerDataRegistry.saveAll()
+        //ServerData.save()
+        //PlayerDataRegistry.saveAll()
 
         // Plugin shutdown logic
         // shutdown coroutine jobs

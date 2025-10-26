@@ -47,9 +47,9 @@ object WorldRegistry {
             )!!
             nmsHandler.setDimensionType(TUTORIAL, DimensionRegistry.BETWEEN)
 
-            //deleteDirectory(Path("between_library"))
-            //deleteDirectory(Path("between_office"))
-            //deleteDirectory(Path("between_pool"))
+            deleteDirectory(Path("between_library"))
+            deleteDirectory(Path("between_office"))
+            deleteDirectory(Path("between_pool"))
 
             BETWEEN_LIBRARY = Bukkit.createWorld(
                 WorldCreator("between_library")
@@ -94,8 +94,8 @@ object WorldRegistry {
 
                     JigsawProcessor(
                         BETWEEN_LIBRARY.getBlockAt(0, 64, 0),
-                        JigsawReferenceManager.getFromName(NamespacedKey.fromString("lib_start")).get(0),
-                        1000,
+                        JigsawReferenceManager.getFromName(NamespacedKey.fromString("lib_start"))[0],
+                        1500,
                         0
                     ).blockProcessor(chestProcessor).start()
                 }
@@ -118,8 +118,8 @@ object WorldRegistry {
 
                     JigsawProcessor(
                         BETWEEN_OFFICE.getBlockAt(0, 64, 0),
-                        JigsawReferenceManager.getFromName(NamespacedKey.fromString("office_sn")).get(0),
-                        1000,
+                        JigsawReferenceManager.getFromName(NamespacedKey.fromString("office_sn"))[0],
+                        1500,
                         0
                     ).blockProcessor(chestProcessor).start()
                 }
@@ -142,7 +142,7 @@ object WorldRegistry {
 
                     JigsawProcessor(
                         BETWEEN_POOL.getBlockAt(0, 64, 0),
-                        JigsawReferenceManager.getFromName(NamespacedKey.fromString("pool_sn")).get(0),
+                        JigsawReferenceManager.getFromName(NamespacedKey.fromString("pool_sn"))[0],
                         500,
                         0
                     ).blockProcessor(chestProcessor).start()

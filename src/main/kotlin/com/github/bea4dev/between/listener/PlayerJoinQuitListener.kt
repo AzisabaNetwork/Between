@@ -19,7 +19,7 @@ class PlayerJoinQuitListener: Listener {
             return
         }
 
-        PlayerDataRegistry.load(PlayerDataRegistry[player])
+        //PlayerDataRegistry.load(PlayerDataRegistry[player])
 
         if (!PlayerDataRegistry[player].finishedTutorial) {
             Tutorial().start(player)

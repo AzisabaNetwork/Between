@@ -13,10 +13,13 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.title.Title
 import org.bukkit.Bukkit
 import org.bukkit.Location
+import org.bukkit.Tag
+import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerBedEnterEvent
+import org.bukkit.inventory.ItemStack
 import java.time.Duration
 
 class BedListener : Listener {
@@ -46,6 +49,10 @@ class BedListener : Listener {
     fun onPlayerSleep(event: PlayerDeepSleepEvent) {
         val player = event.player
         val worldName = player.world.name
+
+        if (worldName == "world") {
+            removeBeds(player)
+        }
 
         if (worldName == "tutorial") {
             CoroutineFlagRegistry.TUTORIAL_ENTER_BED.onComplete(player)
@@ -85,5 +92,28 @@ class BedListener : Listener {
 
     private fun isBetween(worldName: String): Boolean {
         return worldName == "tutorial" || worldName.contains("between")
+    }
+
+    fun removeBeds(player: Player): Int {
+        val inv = player.inventory
+        var removed = 0
+
+        for (slot in 0 until inv.size) {
+            val item: ItemStack? = inv.getItem(slot)
+            if (item != null && Tag.BEDS.isTagged(item.type)) {
+                removed += item.amount
+                inv.clear(slot)
+            }
+        }
+
+        inv.itemInOffHand.let { off ->
+            if (Tag.BEDS.isTagged(off.type)) {
+                removed += off.amount
+                inv.setItemInOffHand(null)
+            }
+        }
+
+        player.updateInventory()
+        return removed
     }
 }
