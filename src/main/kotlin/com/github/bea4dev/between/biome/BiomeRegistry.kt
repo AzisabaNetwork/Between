@@ -7,6 +7,8 @@ import org.bukkit.Color
 object BiomeRegistry {
     lateinit var BETWEEN: Any
         private set
+    lateinit var BETWEEN_OVERWORLD: Any
+        private set
 
     fun init() {
         val nmsHandler = VanillaSourceAPI.getInstance().nmsHandler
@@ -19,6 +21,16 @@ object BiomeRegistry {
         between.temperatureAttribute = BiomeDataContainer.TemperatureAttribute.NORMAL
         between.grassBlockColorRGB = rgbIntFromHex("91BD59")
         BETWEEN = nmsHandler.createBiome("between", between)
+
+        val betweenOverworld = BiomeDataContainer()
+        nmsHandler.setDefaultBiomeData(betweenOverworld)
+        betweenOverworld.fogColorRGB = Color.BLUE.asRGB()
+        betweenOverworld.skyColorRGB = Color.BLUE.asRGB()
+        betweenOverworld.music = "minecraft:none"
+        betweenOverworld.temperature = 0.8F
+        betweenOverworld.temperatureAttribute = BiomeDataContainer.TemperatureAttribute.NORMAL
+        betweenOverworld.grassBlockColorRGB = rgbIntFromHex("91BD59")
+        BETWEEN_OVERWORLD = nmsHandler.createBiome("between_overworld", betweenOverworld)
     }
 
     fun rgbIntFromHex(hex: String): Int {

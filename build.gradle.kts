@@ -26,6 +26,8 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1")
 
+    implementation("de.articdive:jnoise-pipeline:4.1.0")
+
     compileOnly("com.github.bea4dev:vanilla_source_api:0.0.3")
     compileOnly("com.github.bea4dev:ChiyogamiLib:793983cef1")
 }

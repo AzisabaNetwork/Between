@@ -5,6 +5,7 @@ import com.github.bea4dev.between.chest.ChestProcessor
 import com.github.bea4dev.between.dimension.DimensionRegistry
 import com.github.bea4dev.between.save.ServerData
 import com.github.bea4dev.between.util.schedule
+import com.github.bea4dev.between.world.generator.BetweenOverworldGenerator
 import com.github.bea4dev.between.world.generator.PoolGenerator
 import com.github.bea4dev.between.world.generator.SingleBlockGenerator
 import com.github.bea4dev.between.world.generator.VoidGenerator
@@ -35,6 +36,8 @@ object WorldRegistry {
         private set
     lateinit var BETWEEN_POOL: World
         private set
+    lateinit var BETWEEN_OVERWORLD: World
+        private set
 
     fun init(then: () -> Unit) {
         Bukkit.getScheduler().runTask(Between.plugin, Runnable {
@@ -50,6 +53,7 @@ object WorldRegistry {
             deleteDirectory(Path("between_library"))
             deleteDirectory(Path("between_office"))
             deleteDirectory(Path("between_pool"))
+            deleteDirectory(Path("between_overworld"))
 
             BETWEEN_LIBRARY = Bukkit.createWorld(
                 WorldCreator("between_library")
@@ -74,6 +78,13 @@ object WorldRegistry {
             )!!
             nmsHandler.setDimensionType(BETWEEN_POOL, DimensionRegistry.BETWEEN_NO_FOG)
             BETWEEN_POOL.setGameRule(GameRule.DO_MOB_SPAWNING, false)
+
+            BETWEEN_OVERWORLD = Bukkit.createWorld(
+                WorldCreator("between_overworld")
+                    .environment(World.Environment.NORMAL)
+                    .generator(BetweenOverworldGenerator(0))
+            )!!
+            nmsHandler.setDimensionType(BETWEEN_OVERWORLD, DimensionRegistry.BETWEEN_NO_FOG)
 
             if (ServerData.firstSetup) {
                 BETWEEN_LIBRARY.schedule {

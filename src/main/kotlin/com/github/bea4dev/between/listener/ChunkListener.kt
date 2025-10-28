@@ -6,7 +6,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.world.ChunkLoadEvent
 
-class ChunkListener: Listener {
+class ChunkListener : Listener {
     @EventHandler
     fun onChunkLoad(event: ChunkLoadEvent) {
         val world = event.world
@@ -17,7 +17,11 @@ class ChunkListener: Listener {
             nmsHandler.setBiomeForChunk(chunk, BiomeRegistry.BETWEEN)
         }
         if (world.name.contains("between")) {
-            nmsHandler.setBiomeForChunk(chunk, BiomeRegistry.BETWEEN)
+            if (world.name == "between_overworld") {
+                nmsHandler.setBiomeForChunk(chunk, BiomeRegistry.BETWEEN_OVERWORLD)
+            } else {
+                nmsHandler.setBiomeForChunk(chunk, BiomeRegistry.BETWEEN)
+            }
         }
     }
 }

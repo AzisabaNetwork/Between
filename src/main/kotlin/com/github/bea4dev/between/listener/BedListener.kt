@@ -11,7 +11,6 @@ import com.github.bea4dev.between.world.WorldRegistry
 import io.papermc.paper.event.player.PlayerDeepSleepEvent
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.title.Title
-import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Tag
 import org.bukkit.entity.Player
@@ -27,7 +26,7 @@ class BedListener : Listener {
     fun onPlayerSetRespawn(event: PlayerSetSpawnEvent) {
         // betweenでベッドに入るときはリスポーン場所を上書きしないようにする
         val worldName = event.player.world.name
-        if (isBetween(worldName)) {
+        if (isBetween(worldName) && worldName != "between_overworld") {
             event.isCancelled = true
         }
     }
@@ -60,7 +59,7 @@ class BedListener : Listener {
         }
 
         if (isBetween(worldName)) {
-            Bukkit.getWorld("world")!!.setMorning()
+            WorldRegistry.BETWEEN_OVERWORLD.setMorning()
         }
 
         when (worldName) {
@@ -73,7 +72,7 @@ class BedListener : Listener {
             "between_pool" -> {
                 BetweenPool().start(player)
             }
-            "world" -> {
+            "between_overworld" -> {
                 val between = WorldRegistry.getNextBetween()
                 val location = Location(between, 0.5, 64.0, 0.5)
 

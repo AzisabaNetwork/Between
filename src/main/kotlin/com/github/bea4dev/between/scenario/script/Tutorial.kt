@@ -172,7 +172,7 @@ class Tutorial : Scenario() {
         delay(Duration.ofSeconds(3).toMillis())
 
         MainThread.sync {
-            val world = Bukkit.getWorld("world")!!
+            val world = WorldRegistry.BETWEEN_OVERWORLD
             player.teleport(world.spawnLocation)
             player.gameMode = GameMode.SURVIVAL
         }.await()

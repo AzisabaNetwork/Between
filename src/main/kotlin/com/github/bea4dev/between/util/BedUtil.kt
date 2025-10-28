@@ -1,12 +1,12 @@
 package com.github.bea4dev.between.util
 
-import org.bukkit.Bukkit
+import com.github.bea4dev.between.world.WorldRegistry
 import org.bukkit.GameMode
 import org.bukkit.World
 import org.bukkit.entity.Player
 
 fun Player.backToOverworld() {
-    val world = Bukkit.getWorld("world")!!
+    val world = WorldRegistry.BETWEEN_OVERWORLD
     val playerRespawnLocation = this.respawnLocation
 
     if (playerRespawnLocation?.world == world) {

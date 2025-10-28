@@ -22,7 +22,7 @@ object DimensionRegistry {
             .build()
         BETWEEN = nmsHandler.createDimensionType("between", betweenDimensionTypeContainer)
 
-        val btweenNoFogDimensionTypeContainer = DimensionTypeContainer.DimensionTypeContainerBuilder()
+        val betweenNoFogDimensionTypeContainer = DimensionTypeContainer.DimensionTypeContainerBuilder()
             .hasSkyLight(true)
             .ultraWarm(false)
             .effects(DimensionTypeContainer.EffectsType.OVERWORLD)
@@ -31,6 +31,6 @@ object DimensionRegistry {
             .monsterSettings(DimensionTypeContainer.MonsterSettings(false, false, 15))
             .bedWorks(true)
             .build()
-        BETWEEN_NO_FOG = nmsHandler.createDimensionType("between_no_fog", btweenNoFogDimensionTypeContainer)
+        BETWEEN_NO_FOG = nmsHandler.createDimensionType("between_no_fog", betweenNoFogDimensionTypeContainer)
     }
 }
