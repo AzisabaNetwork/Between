@@ -10,7 +10,7 @@ import java.util.Random
 private class NoiseVariables(seed: Long) {
     val baseNoise: JNoise = JNoise.newBuilder()
         .fastSimplex(FastSimplexNoiseGenerator.newBuilder().setSeed(seed).build())
-        .scale(0.008)
+        .scale(0.005)
         .build()
 }
 
